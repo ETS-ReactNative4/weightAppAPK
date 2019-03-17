@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, TextInput, Button, ToolbarAndroid, Text, ScrollView } from 'react-native';
+import { StyleSheet, Text, ScrollView } from 'react-native';
 import { Col, Row, Grid } from 'react-native-easy-grid';
 
 export default class MainPage extends Component {
@@ -46,7 +46,7 @@ export default class MainPage extends Component {
                 <Grid>
                     {dataMap}
                 </Grid>
-                {/* <Button title='Add Step' /> */}
+                <Button title='Add Step' />
             </ScrollView>
         )
     }
@@ -55,7 +55,6 @@ export default class MainPage extends Component {
 const styles = StyleSheet.create({
     oldData: {
         fontSize: 20,
-        // fontWeight: 'bold'
     },
     currentData: {
         fontSize: 20,

@@ -1,5 +1,5 @@
-import React, {Component} from 'react';
-import {Modal, Text, TouchableHighlight, View, Alert} from 'react-native';
+import React, { Component } from 'react';
+import { Modal, Text, TouchableHighlight, View, Alert } from 'react-native';
 
 export default class AddStep extends Component {
   state = {
@@ -7,12 +7,12 @@ export default class AddStep extends Component {
   };
 
   setModalVisible(visible) {
-    this.setState({modalVisible: visible});
+    this.setState({ modalVisible: visible });
   }
 
   render() {
     return (
-      <View style={{marginTop: 22}}>
+      <View style={{ marginTop: 22 }}>
         <Modal
           animationType="slide"
           transparent={false}
@@ -20,7 +20,7 @@ export default class AddStep extends Component {
           onRequestClose={() => {
             Alert.alert('Modal has been closed.');
           }}>
-          <View style={{marginTop: 22}}>
+          <View style={{ marginTop: 22 }}>
             <View>
               <Text>Hello World!</Text>
 
