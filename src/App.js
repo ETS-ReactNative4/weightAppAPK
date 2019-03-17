@@ -8,7 +8,7 @@ class App extends Component {
   render() {
     return (
       <View>
-        <MainPage />
+        <MainPage navigation={this.props.navigation}/>
       </View>
     );
   }
