@@ -3,7 +3,7 @@ import { Modal, Text, TouchableHighlight, View, Alert } from 'react-native';
 
 export default class AddStep extends Component {
   state = {
-    modalVisible: false,
+    modalVisible: true,
   };
 
   setModalVisible(visible) {
@@ -33,13 +33,6 @@ export default class AddStep extends Component {
             </View>
           </View>
         </Modal>
-
-        <TouchableHighlight
-          onPress={() => {
-            this.setModalVisible(true);
-          }}>
-          <Text>Show Modal</Text>
-        </TouchableHighlight>
       </View>
     );
   }

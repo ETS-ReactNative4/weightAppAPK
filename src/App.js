@@ -2,13 +2,13 @@ import React, { Component } from 'react';
 import { View } from 'react-native';
 import { createStackNavigator, createAppContainer } from "react-navigation";
 import AddStep from './Components/AddStepModal.js';
-import MainPage from './Components/MainPage.js';
+import DataGraph from './Components/DataGraph.js';
 
 class App extends Component {
   render() {
     return (
       <View>
-        <MainPage navigation={this.props.navigation}/>
+        <DataGraph navigation={this.props.navigation}/>
       </View>
     );
   }
