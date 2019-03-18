@@ -99,19 +99,20 @@ export default class DataGraph extends Component {
                 width={Dimensions.get('window').width}
                 height={500}
                 chartConfig={{
-                    backgroundColor: '#e26a00',
-                    backgroundGradientFrom: '#fb8c00',
-                    backgroundGradientTo: '#ffa726', 
+                    backgroundColor: '#a5a5a5',
+                    backgroundGradientFrom: '#bcbcbc',
+                    backgroundGradientTo: '#5b5b5b',
                     decimalPlaces: 2,
                     color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
                     style: {
                         borderRadius: 16
-                    }
+                    },
                 }}
                 bezier
                 style={{
                     marginVertical: 8,
-                    borderRadius: 16
+                    borderRadius: 16,
+                    margin: 5
                 }}
             />
         })
@@ -120,13 +121,15 @@ export default class DataGraph extends Component {
 
 
     componentWillMount() {
-        new Promise((resolve, reject) => {
-            this.retrieveData(resolve)
-        }).then((result) => {
-            return this.loadData(result);
-        }).then((result) => {
-            this.loadChart(result)
-        })
+        if (this.state.showChart.props.children === 'Loading...') {
+            new Promise((resolve, reject) => {
+                this.retrieveData(resolve)
+            }).then((result) => {
+                return this.loadData(result);
+            }).then((result) => {
+                this.loadChart(result)
+            })
+        }
     }
 
     render() {
