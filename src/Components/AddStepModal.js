@@ -23,7 +23,6 @@ export default class AddStep extends Component {
       modalVisible: true,
       pickedDate: `${new Date().getMonth() + 1}/${new Date().getDate()}`,
       weightText: '',
-      // chosenDate: `${new Date().getMonth() + 1}/${new Date().getDate()}`
     }
   }
 
@@ -74,14 +73,11 @@ export default class AddStep extends Component {
       if (value !== null) {
         console.log('valuevalue: ', JSON.parse(value));
         resolve(JSON.parse(value));
-        // console.log(JSON.parse(value))
       }
     } catch (error) {
       console.log('1', error);
       alert('Error saving data.')
     }
-    // console.log(this.state.pickedDate, Number(this.state.weightText))
-
   }
 
   saveData = async (data) => {
@@ -112,7 +108,6 @@ export default class AddStep extends Component {
   render() {
     return (
       <View style={{ flex: 1, alignItems: 'center', backgroundColor: '#afbacc' }}>
-        {/* <Text>Current Weight</Text> */}
         <View style={styles.dateContainer}>
           <Text style={styles.dateText}>Date: {this.state.pickedDate}</Text>
           <TouchableHighlight
@@ -142,7 +137,6 @@ export default class AddStep extends Component {
 
 const styles = StyleSheet.create({
   weightTextInput: {
-    // height: 40,
     marginBottom: 20,
     borderColor: 'gray',
     fontSize: 22,
@@ -166,7 +160,6 @@ const styles = StyleSheet.create({
     fontWeight: '300'
   },
   dateContainer: {
-    // flex: 1,
     flexDirection: 'row',
     margin: 20
   },

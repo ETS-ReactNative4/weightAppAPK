@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { Text, View, Dimensions, Button } from 'react-native';
-import { AsyncStorage } from 'react-native';
+import { AsyncStorage, ToastAndroid } from 'react-native';
 import {
     LineChart,
+    onDataPointClick,
 } from 'react-native-chart-kit';
 
 var userData = [
@@ -56,7 +57,6 @@ export default class DataGraph extends Component {
         try {
             const value = await AsyncStorage.getItem('data');
             if (value !== null) {
-                console.log('value', value)
                 resolve(JSON.parse(value))
             }
         } catch (error) {
@@ -66,14 +66,16 @@ export default class DataGraph extends Component {
 
 
     loadData(data) {
-        console.log('hello', data)
         let labels = data.map((item, i, arr) => {
             return item.date
         })
         let dataSet = data.map((item, i, arr) => {
             return item.weight
         })
-        return [labels, dataSet]
+        let metaData = data.map((item, i, arr) => {
+            return i
+        })
+        return { labels, dataSet, metaData }
     }
 
     loadChart(data) {
@@ -81,10 +83,11 @@ export default class DataGraph extends Component {
             this.setState({
                 showChart: <LineChart
                     data={{
-                        labels: data[0],
+                        labels: data.labels,
                         datasets: [
                             {
-                                data: data[1]
+                                data: data.dataSet,
+                                metaData: data.metaData
                             },
                         ]
                     }}
@@ -100,7 +103,9 @@ export default class DataGraph extends Component {
                             borderRadius: 16
                         },
                     }}
-                    bezier
+                    onDataPointClick={({ value, dataset, getColor }) => {
+                        ToastAndroid.show(`${value}lbs`, ToastAndroid.SHORT)
+                    }}
                     style={{
                         marginVertical: 8,
                         borderRadius: 16,
