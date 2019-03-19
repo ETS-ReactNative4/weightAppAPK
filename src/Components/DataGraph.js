@@ -1,12 +1,8 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, ScrollView, Button, View, Dimensions } from 'react-native';
+import { Text, View, Dimensions, Button } from 'react-native';
 import { AsyncStorage } from 'react-native';
 import {
     LineChart,
-    BarChart,
-    PieChart,
-    ProgressChart,
-    ContributionGraph
 } from 'react-native-chart-kit';
 
 var userData = [
@@ -36,23 +32,20 @@ var userData = [
     },
 ];
 
-var showChart;
-
 export default class DataGraph extends Component {
     constructor() {
         super();
-        this.storeData = this.storeData.bind(this);
         this.retrieveData = this.retrieveData.bind(this);
         this.loadData = this.loadData.bind(this);
         this.loadChart = this.loadChart.bind(this);
+        this.loadTestData = this.loadTestData.bind(this);
         this.state = {
             showChart: <Text>Loading...</Text>,
         }
     }
 
-    storeData = async () => {
+    loadTestData = async () => {
         try {
-            console.log("testsend")
             await AsyncStorage.setItem('data', JSON.stringify(userData));
         } catch (error) {
             console.log(error)
@@ -63,8 +56,7 @@ export default class DataGraph extends Component {
         try {
             const value = await AsyncStorage.getItem('data');
             if (value !== null) {
-                console.log(value)
-                // loadedData = JSON.parse(value);
+                console.log('value', value)
                 resolve(JSON.parse(value))
             }
         } catch (error) {
@@ -74,68 +66,73 @@ export default class DataGraph extends Component {
 
 
     loadData(data) {
-        console.log('_loadData ran')
+        console.log('hello', data)
         let labels = data.map((item, i, arr) => {
             return item.date
         })
         let dataSet = data.map((item, i, arr) => {
             return item.weight
         })
-        console.log(labels, dataSet)
         return [labels, dataSet]
     }
 
     loadChart(data) {
-        this.setState({
-            showChart: <LineChart
-                data={{
-                    labels: data[0],
-                    datasets: [
-                        {
-                            data: data[1]
+        if (data) {
+            this.setState({
+                showChart: <LineChart
+                    data={{
+                        labels: data[0],
+                        datasets: [
+                            {
+                                data: data[1]
+                            },
+                        ]
+                    }}
+                    width={Dimensions.get('window').width}
+                    height={500}
+                    chartConfig={{
+                        backgroundColor: '#a5a5a5',
+                        backgroundGradientFrom: '#bcbcbc',
+                        backgroundGradientTo: '#5b5b5b',
+                        decimalPlaces: 2,
+                        color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                        style: {
+                            borderRadius: 16
                         },
-                    ]
-                }}
-                width={Dimensions.get('window').width}
-                height={500}
-                chartConfig={{
-                    backgroundColor: '#a5a5a5',
-                    backgroundGradientFrom: '#bcbcbc',
-                    backgroundGradientTo: '#5b5b5b',
-                    decimalPlaces: 2,
-                    color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-                    style: {
-                        borderRadius: 16
-                    },
-                }}
-                bezier
-                style={{
-                    marginVertical: 8,
-                    borderRadius: 16,
-                    margin: 5
-                }}
-            />
-        })
+                    }}
+                    bezier
+                    style={{
+                        marginVertical: 8,
+                        borderRadius: 16,
+                        margin: 5
+                    }}
+                />
+            })
+        } else {
+            alert('Error loading data')
+        }
     }
 
-
-
     componentWillMount() {
-        if (this.state.showChart.props.children === 'Loading...') {
-            new Promise((resolve, reject) => {
-                this.retrieveData(resolve)
-            }).then((result) => {
-                return this.loadData(result);
-            }).then((result) => {
-                this.loadChart(result)
-            })
-        }
+        // if (this.state.showChart.props.children === 'Loading...') {
+        new Promise((resolve, reject) => {
+            this.retrieveData(resolve)
+        }).then((result) => {
+            return this.loadData(result);
+        }).then((result) => {
+            this.loadChart(result)
+        }).catch((error) => {
+            console.log(error)
+        })
+        // }
     }
 
     render() {
         return (
             <View>
                 {this.state.showChart}
+                <Button onPress={this.loadTestData}
+                    title='Load Test Data' />
             </View>
         )
     }

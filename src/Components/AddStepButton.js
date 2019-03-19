@@ -8,7 +8,7 @@ export default class AddStepButton extends Component {
     }
 
     showAddStepModal() {
-        console.log(this.props.navigation.navigate('AddStep'))
+        this.props.navigation.navigate('AddStep');
     }
 
     render() {
@@ -35,7 +35,6 @@ const styles = StyleSheet.create({
         margin: 10
     },
     text: {
-        // margin: 30,
         textAlign: 'center',
         fontSize: 50,
         fontWeight: 'bold',
