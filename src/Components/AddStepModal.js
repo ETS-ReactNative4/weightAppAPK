@@ -22,6 +22,7 @@ export default class AddStep extends Component {
     this.state = {
       modalVisible: true,
       pickedDate: `${new Date().getMonth() + 1}/${new Date().getDate()}`,
+      pickedDateTime: '',
       weightText: '',
     }
   }
@@ -37,7 +38,8 @@ export default class AddStep extends Component {
       });
       if (action !== DatePickerAndroid.dismissedAction) {
         this.setState({
-          pickedDate: `${month + 1}/${day}`
+          pickedDate: `${month + 1}/${day}`,
+          pickedDateTime: new Date(year, month, day).getTime()
         })
       }
     } catch ({ code, message }) {
@@ -84,6 +86,7 @@ export default class AddStep extends Component {
     console.log('data', data);
     data.push({
       date: this.state.pickedDate,
+      dateTime: this.state.pickedDateTime,
       weight: Number(this.state.weightText)
     });
     console.log(JSON.stringify(data));

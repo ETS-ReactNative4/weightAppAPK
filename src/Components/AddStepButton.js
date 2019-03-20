@@ -15,8 +15,7 @@ export default class AddStepButton extends Component {
         return (
             <TouchableNativeFeedback
                 onPress={this.showAddStepModal}
-                background={TouchableNativeFeedback.SelectableBackground()}
-                style={styles.native}>
+                background={TouchableNativeFeedback.SelectableBackground()}>
                 <View style={styles.button}>
                     <Text style={styles.text}>+</Text>
                 </View>
@@ -29,7 +28,7 @@ const styles = StyleSheet.create({
     button: {
         width: 100,
         height: 100,
-        backgroundColor: 'red',
+        backgroundColor: 'green',
         justifyContent: 'center',
         borderRadius: 50,
         margin: 10
@@ -40,8 +39,5 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: 'black',
         opacity: .75
-    },
-    native: {
-        // justifyContent: 'center'
     }
 })

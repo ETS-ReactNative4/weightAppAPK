@@ -9,12 +9,9 @@ import {
 var userData = [
     {
         date: '3/1',
+        dateTime: 8378274823,
         weight: 130,
-        goalDate: {
-            year: 2019,
-            month: 5,
-            day: 7,
-        },
+        goalDate: 123812832837,
         goalWeight: 100
     },
     {
@@ -46,12 +43,21 @@ export default class DataGraph extends Component {
         this.loadChart = this.loadChart.bind(this);
         this.loadTestData = this.loadTestData.bind(this);
         this.newUserTest = this.newUserTest.bind(this);
+        this.deleteAllData = this.deleteAllData.bind(this);
         this.state = {
             showChart: <Text>Loading...</Text>,
         }
     }
 
-    newUserTest () {
+    deleteAllData = async () => {
+        try {
+            await AsyncStorage.removeItem('data');
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    newUserTest() {
         this.props.navigation.navigate('NewUser')
     }
 
@@ -138,6 +144,8 @@ export default class DataGraph extends Component {
                     title='Load Test Data' />
                 <Button onPress={this.newUserTest}
                     title='New User Test' />
+                <Button onPress={this.deleteAllData}
+                    title='Delete All Data' />
             </View>
         )
     }

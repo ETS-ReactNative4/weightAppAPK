@@ -8,6 +8,7 @@ export default class CurrentStats extends Component {
         super();
         this.loadData = this.loadData.bind(this);
         this.daysBetween = this.daysBetween.bind(this);
+        this.nextWeighIn = this.nextWeighIn.bind(this);
         this.state = {
             currentWeight: 'Loading..',
             lbsLeft: 'Loading..',
@@ -16,12 +17,15 @@ export default class CurrentStats extends Component {
             daysLeft: 'Loading..',
             totalLost: 'Loading',
             startDate: 'Loading..',
+            nextWeighInDate: 'Loading..'
         }
     }
 
     loadData(data) {
         // Add daysTilNextWeighIn
+        console.log('dataaa', data)
         let mostRecentEntry = data[data.length - 1];
+        let nextWeighInDate = this.nextWeighIn(data[data.length - 1]);
         let currentWeight = mostRecentEntry.weight;
         let lbsLeft = currentWeight - data[0].goalWeight;
         let daysLeft = this.daysBetween(data[0].goalDate)
@@ -36,16 +40,23 @@ export default class CurrentStats extends Component {
             nextWeekGoal,
             daysLeft,
             totalLost,
-            startDate
+            startDate,
+            nextWeighInDate,
         })
     }
 
     daysBetween(endDate) {
         let startDateTime = new Date().getTime();
-        let endDateTime = new Date(endDate.year, endDate.month, endDate.day).getTime();
         let oneDay = 1000 * 60 * 60 * 24;
-        let daysBetween = Math.floor((endDateTime - startDateTime) / oneDay);
+        let daysBetween = Math.floor((endDate - startDateTime) / oneDay);
         return daysBetween
+    }
+
+    nextWeighIn(lastEntry) {
+        let oneWeekMS = 1000 * 60 * 60 * 24 * 7;
+        let weighInDateInMS = oneWeekMS + lastEntry.dateTime;
+        let weighInDate = new Date(weighInDateInMS).toLocaleDateString();
+        return weighInDate
     }
 
     componentWillMount() {
@@ -59,16 +70,19 @@ export default class CurrentStats extends Component {
     }
 
     render() {
+        if (this.props.newUserCheck) {
+            this.props.navigation.navigate('NewUser');
+        }
         return (
             <Grid style={styles.gridContainer}>
                 <Col style={styles.colContainer}>
                     <Row style={styles.rowContainer}>
                         <Text style={styles.labelText}>Current Weight</Text>
-                        <Text style={styles.dataText}>{this.state.currentWeight}</Text>
+                        <Text style={styles.dataText}>{this.state.currentWeight} lbs</Text>
                     </Row>
                     <Row style={styles.rowContainer}>
                         <Text style={styles.labelText}>Next Week Goal</Text>
-                        <Text style={styles.dataText}>{this.state.nextWeekGoal}</Text>
+                        <Text style={styles.dataText}>{this.state.nextWeekGoal} lbs</Text>
                     </Row>
                     <Row style={styles.buttonContainer}>
                         <AddStepButton navigation={this.props.navigation} />
@@ -76,27 +90,27 @@ export default class CurrentStats extends Component {
                 </Col>
                 <Col style={styles.colContainer}>
                     <Row style={styles.rowContainer}>
-                        <Text style={styles.labelText}>Lbs Left</Text>
-                        <Text style={styles.dataText}>{this.state.lbsLeft}</Text>
+                        <Text style={styles.labelText}>Lbs Remaining</Text>
+                        <Text style={styles.dataText}>{this.state.lbsLeft} lbs</Text>
                     </Row>
                     <Row style={styles.rowContainer}>
                         <Text style={styles.labelText}>Days Left</Text>
-                        <Text style={styles.dataText}>{this.state.daysLeft}</Text>
+                        <Text style={styles.dataText}>{this.state.daysLeft} days</Text>
                     </Row>
                     <Row style={styles.rowContainer}>
-                        <Text style={styles.labelText}>Days Left</Text>
-                        <Text style={styles.dataText}>{this.state.daysLeft}</Text>
+                        <Text style={styles.labelText}>Next Weigh In</Text>
+                        <Text style={styles.dataText}>{this.state.nextWeighInDate}</Text>
                     </Row>
                 </Col>
                 <Col style={styles.colContainer}>
                     <Row style={styles.rowContainer}>
-                        <Text style={styles.labelText}>Lbs/Wk</Text>
-                        <Text style={styles.dataText}>{this.state.lbsPerWeek}</Text>
+                        <Text style={styles.labelText}>Goal per Week</Text>
+                        <Text style={styles.dataText}>{this.state.lbsPerWeek} lbs/week</Text>
                     </Row>
                     <Row style={styles.rowContainer}>
                         <Text style={styles.labelText}>Total Lost</Text>
                         <Text style={styles.startDateText}>(Started on {this.state.startDate})</Text>
-                        <Text style={styles.dataText}>{this.state.totalLost}</Text>
+                        <Text style={styles.dataText}>{this.state.totalLost} lbs</Text>
                     </Row>
                     <Row style={styles.buttonContainer}>
                         <AddStepButton navigation={this.props.navigation} />

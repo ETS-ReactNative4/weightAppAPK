@@ -1,181 +1,243 @@
 import React, { Component } from 'react';
 import {
-  Text,
-  TextInput,
-  TouchableHighlight,
-  View,
-  DatePickerAndroid,
-  StyleSheet,
-  AsyncStorage
+    Text,
+    TextInput,
+    TouchableHighlight,
+    View,
+    DatePickerAndroid,
+    StyleSheet,
+    AsyncStorage,
+    BackHandler,
 } from 'react-native';
 import { StackActions, NavigationActions } from 'react-navigation';
 
 export default class NewUser extends Component {
-  constructor() {
-    super();
-    this.showDatePicker = this.showDatePicker.bind(this);
-    this.submitData = this.submitData.bind(this);
-    this.onChangeWeight = this.onChangeWeight.bind(this);
-    this.saveData = this.saveData.bind(this);
-    this.getData = this.getData.bind(this);
-    this.resetStack = this.resetStack.bind(this);
-    this.state = {
-      modalVisible: true,
-      pickedDate: `${new Date().getMonth() + 1}/${new Date().getDate()}`,
-      weightText: '',
+    static navigationOptions = {
+        header: null
     }
-  }
-
-  setModalVisible(visible) {
-    this.setState({ modalVisible: visible });
-  }
-
-  showDatePicker = async () => {
-    try {
-      const { action, year, month, day } = await DatePickerAndroid.open({
-        date: new Date()
-      });
-      if (action !== DatePickerAndroid.dismissedAction) {
-        this.setState({
-          pickedDate: `${month + 1}/${day}`
-        })
-      }
-    } catch ({ code, message }) {
-      console.warn('Cannot open date picker', message)
+    _didFocusSubscription;
+    _willBlurSubscription;
+    constructor(props) {
+        super(props);
+        this.showCurrentDatePicker = this.showCurrentDatePicker.bind(this);
+        this.submitData = this.submitData.bind(this);
+        this.onChangeWeight = this.onChangeWeight.bind(this);
+        this.saveData = this.saveData.bind(this);
+        this.resetStack = this.resetStack.bind(this);
+        this.onChangeGoalWeight = this.onChangeGoalWeight.bind(this);
+        this.showGoalDatePicker = this.showGoalDatePicker.bind(this);
+        this._didFocusSubscription = props.navigation.addListener('didFocus', payload =>
+            BackHandler.addEventListener('hardwareBackPress', this.onBackButtonPressAndroid)
+        );
+        this.state = {
+            modalVisible: true,
+            pickedDate: `${new Date().getMonth() + 1}/${new Date().getDate()}`,
+            pickedDateTime: new Date().getTime(),
+            goalDate: '',
+            goalDateText: '',
+            weightText: '',
+            goalWeightText: '',
+        }
     }
-  }
 
-  submitData() {
-    if (!this.state.weightText) {
-      return alert('Weight cannot be blank')
-    } else {
-      new Promise((resolve, reject) => {
-        this.getData(resolve);
-      }).then((result) => {
-        console.log('reslemlsmd', result)
-        this.saveData(result);
-        this.resetStack()
-      })
+    componentDidMount() {
+        this._willBlurSubscription = this.props.navigation.addListener('willBlur', payload =>
+            BackHandler.removeEventListener('hardwareBackPress', this.onBackButtonPressAndroid)
+        );
     }
-  }
 
-  resetStack() {
-    const resetAction = StackActions.reset({
-      index: 0,
-      actions: [NavigationActions.navigate({ routeName: 'Home' })],
-    });
-    this.props.navigation.dispatch(resetAction);
-  }
+    onBackButtonPressAndroid = () => {
+        if (true) {
+            return true;
+        }
+    };
 
-  getData = async (resolve) => {
-    try {
-      const value = await AsyncStorage.getItem('data');
-      if (value !== null) {
-        console.log('valuevalue: ', JSON.parse(value));
-        resolve(JSON.parse(value));
-      }
-    } catch (error) {
-      console.log('1', error);
-      alert('Error saving data.')
+    componentWillUnmount() {
+        this._didFocusSubscription && this._didFocusSubscription.remove();
+        this._willBlurSubscription && this._willBlurSubscription.remove();
     }
-  }
 
-  saveData = async (data) => {
-    console.log('data', data);
-    data.push({
-      date: this.state.pickedDate,
-      weight: Number(this.state.weightText)
-    });
-    console.log(JSON.stringify(data));
-    try {
-      await AsyncStorage.setItem('data', JSON.stringify(data));
-    } catch (error) {
-      console.log(error)
-      alert('Error saving data..')
+    setModalVisible(visible) {
+        this.setState({ modalVisible: visible });
     }
-  }
 
-  onChangeWeight(e) {
-    if (Number.isNaN(Number(e)) === true) {
-      return alert('Please only input numbers');
-    } else {
-      this.setState({
-        weightText: e
-      });
+    showCurrentDatePicker = async () => {
+        try {
+            const { action, year, month, day } = await DatePickerAndroid.open({
+                date: new Date()
+            });
+            if (action !== DatePickerAndroid.dismissedAction) {
+                this.setState({
+                    pickedDate: `${month + 1}/${day}`,
+                    pickedDateTime: new Date(year, month, day).getTime()
+                })
+            }
+        } catch ({ code, message }) {
+            console.warn('Cannot open date picker', message)
+        }
     }
-  }
 
-  render() {
-    return (
-      <View style={{ flex: 1, alignItems: 'center', backgroundColor: '#afbacc' }}>
-        <View style={styles.dateContainer}>
-          <Text style={styles.dateText}>Date: {this.state.pickedDate}</Text>
-          <TouchableHighlight
-            style={styles.datePicker}
-            onPress={this.showDatePicker}>
-            <Text style={styles.dateButton}>Change Date</Text>
-          </TouchableHighlight>
-        </View>
-        <TextInput style={styles.weightTextInput}
-          keyboardType='number-pad'
-          onChangeText={this.onChangeWeight}
-          value={this.state.weightText}
-          maxLength={3}
-          placeholder='Weight'
-          autoFocus={true}
-          textAlign={'center'}
-        />
-        <TouchableHighlight
-          style={styles.addButton}
-          onPress={this.submitData}>
-          <Text style={styles.addText}>Add</Text>
-        </TouchableHighlight>
-      </View>
-    );
-  }
+    showGoalDatePicker = async () => {
+        try {
+            const { action, year, month, day } = await DatePickerAndroid.open({
+                date: new Date()
+            });
+            if (action !== DatePickerAndroid.dismissedAction) {
+                this.setState({
+                    goalDate: new Date(year, month, day).getTime(),
+                    goalDateText: `${month + 1}/${day}`
+                })
+            }
+        } catch ({ code, message }) {
+            console.warn('Cannot open date picker', message)
+        }
+    }
+
+    submitData() {
+        if (!this.state.weightText || !this.state.goalWeightText || !this.state.goalDateText) {
+            return alert('Please fill out all fields')
+        } else {
+            new Promise((resolve, reject) => {
+                this.saveData(resolve)
+            }).then(() => {
+                this.resetStack()
+            })
+        }
+    }
+
+    resetStack() {
+        const resetAction = StackActions.reset({
+            index: 0,
+            actions: [NavigationActions.navigate({ routeName: 'Home' })],
+        });
+        this.props.navigation.dispatch(resetAction);
+    }
+
+    saveData = async (resolve) => {
+        let data = [{
+            date: this.state.pickedDate,
+            dateTime: this.state.pickedDateTime,
+            weight: Number(this.state.weightText),
+            goalDate: this.state.goalDate,
+            goalWeight: Number(this.state.goalWeightText)
+        }];
+        console.log(JSON.stringify(data));
+        try {
+            await AsyncStorage.setItem('data', JSON.stringify(data));
+            resolve();
+        } catch (error) {
+            console.log(error)
+            alert('Error saving data..')
+        }
+    }
+
+    onChangeWeight(e) {
+        if (Number.isNaN(Number(e)) === true) {
+            return alert('Please only input numbers');
+        } else {
+            this.setState({
+                weightText: e
+            });
+        }
+    }
+
+    onChangeGoalWeight(e) {
+        if (Number.isNaN(Number(e)) === true) {
+            return alert('Please only input numbers');
+        } else {
+            this.setState({
+                goalWeightText: e
+            });
+        }
+    }
+
+    render() {
+        return (
+            <View style={{ flex: 1, alignItems: 'center', backgroundColor: '#afbacc' }}>
+                <View style={styles.dateContainer}>
+                    <Text>Welcome!{'\n'}Please submit your first log</Text>
+                    <Text style={styles.dateText}>Date: {this.state.pickedDate}</Text>
+                    <TouchableHighlight
+                        style={styles.datePicker}
+                        onPress={this.showCurrentDatePicker}>
+                        <Text style={styles.dateButton}>Change Date</Text>
+                    </TouchableHighlight>
+                    <Text style={styles.dateText}>Goal Date: {this.state.goalDateText}</Text>
+                    <TouchableHighlight
+                        style={styles.datePicker}
+                        onPress={this.showGoalDatePicker}>
+                        <Text style={styles.dateButton}>Change Goal Date</Text>
+                    </TouchableHighlight>
+                </View>
+                <TextInput style={styles.weightTextInput}
+                    keyboardType='number-pad'
+                    onChangeText={this.onChangeWeight}
+                    value={this.state.weightText}
+                    maxLength={3}
+                    placeholder='Current Weight'
+                    autoFocus={false}
+                    textAlign={'center'}
+                />
+                <TextInput style={styles.weightTextInput}
+                    keyboardType='number-pad'
+                    onChangeText={this.onChangeGoalWeight}
+                    value={this.state.goalWeightText}
+                    maxLength={3}
+                    placeholder='Goal Weight'
+                    autoFocus={false}
+                    textAlign={'center'}
+                />
+                <TouchableHighlight
+                    style={styles.addButton}
+                    onPress={this.submitData}>
+                    <Text style={styles.addText}>Add</Text>
+                </TouchableHighlight>
+            </View>
+        );
+    }
 }
 
 const styles = StyleSheet.create({
-  weightTextInput: {
-    marginBottom: 20,
-    borderColor: 'gray',
-    fontSize: 22,
-    backgroundColor: '#d8d8d8',
-    width: 100,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 25
-  },
-  datePicker: {
-    backgroundColor: 'gray',
-    width: 100,
-    height: 30,
-    alignItems: 'center',
-    borderRadius: 25,
-    justifyContent: 'center',
-  },
-  dateText: {
-    margin: 5,
-    fontSize: 20,
-    fontWeight: '300'
-  },
-  dateContainer: {
-    flexDirection: 'row',
-    margin: 20
-  },
-  dateButton: {
-    fontSize: 14
-  },
-  addText: {
-    fontSize: 26,
-    fontWeight: '800'
-  },
-  addButton: {
-    backgroundColor: 'green',
-    width: 200,
-    height: 60,
-    borderRadius: 25,
-    alignItems: 'center',
-    justifyContent: 'center',
-  }
+    weightTextInput: {
+        marginBottom: 20,
+        borderColor: 'gray',
+        fontSize: 22,
+        backgroundColor: '#d8d8d8',
+        width: 100,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 25
+    },
+    datePicker: {
+        backgroundColor: 'gray',
+        width: 100,
+        height: 30,
+        alignItems: 'center',
+        borderRadius: 25,
+        justifyContent: 'center',
+    },
+    dateText: {
+        margin: 5,
+        fontSize: 20,
+        fontWeight: '300'
+    },
+    dateContainer: {
+        flexDirection: 'row',
+        margin: 20
+    },
+    dateButton: {
+        fontSize: 14
+    },
+    addText: {
+        fontSize: 26,
+        fontWeight: '800'
+    },
+    addButton: {
+        backgroundColor: 'green',
+        width: 200,
+        height: 60,
+        borderRadius: 25,
+        alignItems: 'center',
+        justifyContent: 'center',
+    }
 })
