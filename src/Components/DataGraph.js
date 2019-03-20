@@ -9,7 +9,13 @@ import {
 var userData = [
     {
         date: '3/1',
-        weight: 130
+        weight: 130,
+        goalDate: {
+            year: 2019,
+            month: 5,
+            day: 7,
+        },
+        goalWeight: 100
     },
     {
         date: '3/2',
@@ -36,13 +42,17 @@ var userData = [
 export default class DataGraph extends Component {
     constructor() {
         super();
-        this.retrieveData = this.retrieveData.bind(this);
         this.loadData = this.loadData.bind(this);
         this.loadChart = this.loadChart.bind(this);
         this.loadTestData = this.loadTestData.bind(this);
+        this.newUserTest = this.newUserTest.bind(this);
         this.state = {
             showChart: <Text>Loading...</Text>,
         }
+    }
+
+    newUserTest () {
+        this.props.navigation.navigate('NewUser')
     }
 
     loadTestData = async () => {
@@ -52,18 +62,6 @@ export default class DataGraph extends Component {
             console.log(error)
         }
     }
-
-    retrieveData = async (resolve) => {
-        try {
-            const value = await AsyncStorage.getItem('data');
-            if (value !== null) {
-                resolve(JSON.parse(value))
-            }
-        } catch (error) {
-            console.log(error)
-        }
-    }
-
 
     loadData(data) {
         let labels = data.map((item, i, arr) => {
@@ -107,7 +105,7 @@ export default class DataGraph extends Component {
                         ToastAndroid.show(`${value}lbs`, ToastAndroid.SHORT)
                     }}
                     style={{
-                        marginVertical: 8,
+                        // marginBottom: -50,
                         borderRadius: 16,
                         alignItems: 'center'
                     }}
@@ -121,24 +119,25 @@ export default class DataGraph extends Component {
     componentWillMount() {
         if (this.state.showChart.props.children === 'Loading...') {
             new Promise((resolve, reject) => {
-                this.retrieveData(resolve)
+                this.props.retrieveData(resolve);
             }).then((result) => {
                 return this.loadData(result);
             }).then((result) => {
-                this.loadChart(result)
+                this.loadChart(result);
             }).catch((error) => {
-                console.log(error)
+                console.log(error);
             })
         }
     }
 
     render() {
-        console.log(this.props)
         return (
             <View>
                 {this.state.showChart}
                 <Button onPress={this.loadTestData}
                     title='Load Test Data' />
+                <Button onPress={this.newUserTest}
+                    title='New User Test' />
             </View>
         )
     }
