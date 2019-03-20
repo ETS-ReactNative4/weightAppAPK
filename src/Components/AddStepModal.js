@@ -11,6 +11,12 @@ import {
 import { StackActions, NavigationActions } from 'react-navigation';
 
 export default class AddStep extends Component {
+  static navigationOptions = {
+    title: "Back",
+    headerStyle: {
+      backgroundColor: '#afbacc',
+    }
+  }
   constructor() {
     super();
     this.showDatePicker = this.showDatePicker.bind(this);
@@ -22,7 +28,7 @@ export default class AddStep extends Component {
     this.state = {
       modalVisible: true,
       pickedDate: `${new Date().getMonth() + 1}/${new Date().getDate()}`,
-      pickedDateTime: '',
+      pickedDateTime: new Date().getTime(),
       weightText: '',
     }
   }
@@ -112,7 +118,7 @@ export default class AddStep extends Component {
     return (
       <View style={{ flex: 1, alignItems: 'center', backgroundColor: '#afbacc' }}>
         <View style={styles.dateContainer}>
-          <Text style={styles.dateText}>Date: {this.state.pickedDate}</Text>
+          <Text style={styles.dateText}>Log Date: {this.state.pickedDate}</Text>
           <TouchableHighlight
             style={styles.datePicker}
             onPress={this.showDatePicker}>
@@ -140,7 +146,7 @@ export default class AddStep extends Component {
 
 const styles = StyleSheet.create({
   weightTextInput: {
-    marginBottom: 20,
+    margin: 20,
     borderColor: 'gray',
     fontSize: 22,
     backgroundColor: '#d8d8d8',
@@ -158,13 +164,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   dateText: {
-    margin: 5,
     fontSize: 20,
     fontWeight: '300'
   },
   dateContainer: {
-    flexDirection: 'row',
-    margin: 20
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   dateButton: {
     fontSize: 14

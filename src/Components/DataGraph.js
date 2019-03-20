@@ -37,6 +37,9 @@ var userData = [
 ];
 
 export default class DataGraph extends Component {
+    static navigationOptions = {
+        header: null
+    }
     constructor() {
         super();
         this.loadData = this.loadData.bind(this);

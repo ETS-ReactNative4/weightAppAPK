@@ -2,8 +2,12 @@ import React, { Component } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 import { Col, Row, Grid } from 'react-native-easy-grid';
 import AddStepButton from './AddStepButton';
+import RemoveStepButton from './RemoveStepButton';
 
 export default class CurrentStats extends Component {
+    static navigationOptions = {
+        header: null
+    }
     constructor() {
         super();
         this.loadData = this.loadData.bind(this);
@@ -22,8 +26,6 @@ export default class CurrentStats extends Component {
     }
 
     loadData(data) {
-        // Add daysTilNextWeighIn
-        console.log('dataaa', data)
         let mostRecentEntry = data[data.length - 1];
         let nextWeighInDate = this.nextWeighIn(data[data.length - 1]);
         let currentWeight = mostRecentEntry.weight;
@@ -70,9 +72,6 @@ export default class CurrentStats extends Component {
     }
 
     render() {
-        if (this.props.newUserCheck) {
-            this.props.navigation.navigate('NewUser');
-        }
         return (
             <Grid style={styles.gridContainer}>
                 <Col style={styles.colContainer}>
@@ -113,7 +112,7 @@ export default class CurrentStats extends Component {
                         <Text style={styles.dataText}>{this.state.totalLost} lbs</Text>
                     </Row>
                     <Row style={styles.buttonContainer}>
-                        <AddStepButton navigation={this.props.navigation} />
+                        <RemoveStepButton navigation={this.props.navigation} />
                     </Row>
                 </Col>
             </Grid>
@@ -123,18 +122,20 @@ export default class CurrentStats extends Component {
 
 const styles = StyleSheet.create({
     gridContainer: {
-        margin: 5
+        margin: 5,
     },
     colContainer: {
+        color: 'black'
     },
     rowContainer: {
         justifyContent: 'center',
         alignItems: 'center',
         borderWidth: 1,
         borderRadius: 20,
-        backgroundColor: 'gray',
+        backgroundColor: 'silver',
         flex: 1,
-        flexDirection: 'column'
+        flexDirection: 'column',
+        margin: 3
     },
     labelText: {
         fontSize: 14,
@@ -152,6 +153,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 20,
         flex: 1,
-        flexDirection: 'column'
+        flexDirection: 'column',
+        margin: 3
     }
 })

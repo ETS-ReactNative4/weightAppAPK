@@ -47,9 +47,7 @@ export default class NewUser extends Component {
     }
 
     onBackButtonPressAndroid = () => {
-        if (true) {
-            return true;
-        }
+        return true;
     };
 
     componentWillUnmount() {
@@ -155,12 +153,15 @@ export default class NewUser extends Component {
         return (
             <View style={{ flex: 1, alignItems: 'center', backgroundColor: '#afbacc' }}>
                 <View style={styles.dateContainer}>
-                    <Text>Welcome!{'\n'}Please submit your first log</Text>
-                    <Text style={styles.dateText}>Date: {this.state.pickedDate}</Text>
+                    <View style={styles.welcomeTextContainer}>
+                        <Text style={styles.welcomeText}>Welcome!</Text>
+                        <Text style={styles.welcomeText}>Please submit your first log</Text>
+                    </View>
+                    <Text style={styles.dateText}>First Log Date: {this.state.pickedDate}</Text>
                     <TouchableHighlight
                         style={styles.datePicker}
                         onPress={this.showCurrentDatePicker}>
-                        <Text style={styles.dateButton}>Change Date</Text>
+                        <Text style={styles.dateButton}>Change First Log Date</Text>
                     </TouchableHighlight>
                     <Text style={styles.dateText}>Goal Date: {this.state.goalDateText}</Text>
                     <TouchableHighlight
@@ -177,6 +178,7 @@ export default class NewUser extends Component {
                     placeholder='Current Weight'
                     autoFocus={false}
                     textAlign={'center'}
+                    width={250}
                 />
                 <TextInput style={styles.weightTextInput}
                     keyboardType='number-pad'
@@ -186,6 +188,7 @@ export default class NewUser extends Component {
                     placeholder='Goal Weight'
                     autoFocus={false}
                     textAlign={'center'}
+                    width={250}
                 />
                 <TouchableHighlight
                     style={styles.addButton}
@@ -210,7 +213,7 @@ const styles = StyleSheet.create({
     },
     datePicker: {
         backgroundColor: 'gray',
-        width: 100,
+        width: 180,
         height: 30,
         alignItems: 'center',
         borderRadius: 25,
@@ -222,7 +225,9 @@ const styles = StyleSheet.create({
         fontWeight: '300'
     },
     dateContainer: {
-        flexDirection: 'row',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
         margin: 20
     },
     dateButton: {
@@ -239,5 +244,14 @@ const styles = StyleSheet.create({
         borderRadius: 25,
         alignItems: 'center',
         justifyContent: 'center',
+    },
+    welcomeTextContainer: {
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    welcomeText: {
+        fontSize: 22,
+        fontWeight: 'bold',
+        color: 'black'
     }
 })

@@ -5,8 +5,18 @@ import AddStep from './Components/AddStepModal.js';
 import DataGraph from './Components/DataGraph.js';
 import CurrentStats from './Components/CurrentStats.js';
 import NewUser from './Components/NewUserModal.js';
+import RemoveStep from './Components/RemoveStepModal';
 
 class App extends Component {
+  static navigationOptions = {
+    title: 'Weight Tracker App',
+    headerTitleStyle: {
+      color: 'white'
+    },
+    headerStyle: {
+      backgroundColor: '#111111',
+    }
+  }
   constructor() {
     super();
     this.retrieveData = this.retrieveData.bind(this);
@@ -50,23 +60,15 @@ class App extends Component {
   }
 }
 
-
-
 const AppNavigator = createStackNavigator(
   {
     Home: App,
     AddStep: AddStep,
+    RemoveStep: RemoveStep,
     NewUser: NewUser,
   },
   {
     initialRouteName: 'Home',
-    // defaultNavigationOptions: {
-    //   header: null,
-    //   title: 'Hello',
-    //   headerStyle: {
-    //     backgroundColor: 'black'
-    //   }
-    // }
   },
 );
 
