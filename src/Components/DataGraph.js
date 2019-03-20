@@ -91,7 +91,7 @@ export default class DataGraph extends Component {
                             },
                         ]
                     }}
-                    width={Dimensions.get('window').width}
+                    width={Dimensions.get('window').width - 10}
                     height={500}
                     chartConfig={{
                         backgroundColor: '#a5a5a5',
@@ -109,7 +109,7 @@ export default class DataGraph extends Component {
                     style={{
                         marginVertical: 8,
                         borderRadius: 16,
-                        margin: 5
+                        alignItems: 'center'
                     }}
                 />
             })
@@ -119,20 +119,21 @@ export default class DataGraph extends Component {
     }
 
     componentWillMount() {
-        // if (this.state.showChart.props.children === 'Loading...') {
-        new Promise((resolve, reject) => {
-            this.retrieveData(resolve)
-        }).then((result) => {
-            return this.loadData(result);
-        }).then((result) => {
-            this.loadChart(result)
-        }).catch((error) => {
-            console.log(error)
-        })
-        // }
+        if (this.state.showChart.props.children === 'Loading...') {
+            new Promise((resolve, reject) => {
+                this.retrieveData(resolve)
+            }).then((result) => {
+                return this.loadData(result);
+            }).then((result) => {
+                this.loadChart(result)
+            }).catch((error) => {
+                console.log(error)
+            })
+        }
     }
 
     render() {
+        console.log(this.props)
         return (
             <View>
                 {this.state.showChart}
