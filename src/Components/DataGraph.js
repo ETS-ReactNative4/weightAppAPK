@@ -99,7 +99,7 @@ export default class DataGraph extends Component {
                         ]
                     }}
                     width={Dimensions.get('window').width - 10}
-                    height={500}
+                    height={Dimensions.get('window').height / 2}
                     chartConfig={{
                         backgroundColor: '#a5a5a5',
                         backgroundGradientFrom: '#bcbcbc',
@@ -116,7 +116,7 @@ export default class DataGraph extends Component {
                     style={{
                         // marginBottom: -50,
                         borderRadius: 16,
-                        alignItems: 'center'
+                        alignItems: 'center',
                     }}
                 />
             })
@@ -143,12 +143,12 @@ export default class DataGraph extends Component {
         return (
             <View>
                 {this.state.showChart}
-                <Button onPress={this.loadTestData}
+                {/* <Button onPress={this.loadTestData}
                     title='Load Test Data' />
                 <Button onPress={this.newUserTest}
                     title='New User Test' />
                 <Button onPress={this.deleteAllData}
-                    title='Delete All Data' />
+                    title='Delete All Data' /> */}
             </View>
         )
     }

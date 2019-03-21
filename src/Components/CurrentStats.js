@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet, Text, Dimensions } from 'react-native';
 import { Col, Row, Grid } from 'react-native-easy-grid';
 import AddStepButton from './AddStepButton';
 import RemoveStepButton from './RemoveStepButton';
@@ -112,7 +112,7 @@ export default class CurrentStats extends Component {
                         <Text style={styles.dataText}>{this.state.totalLost} lbs</Text>
                     </Row>
                     <Row style={styles.buttonContainer}>
-                        <RemoveStepButton navigation={this.props.navigation} />
+                        <RemoveStepButton style={styles.removeStepBtn} navigation={this.props.navigation} />
                     </Row>
                 </Col>
             </Grid>
@@ -122,7 +122,8 @@ export default class CurrentStats extends Component {
 
 const styles = StyleSheet.create({
     gridContainer: {
-        margin: 5,
+        // margin: 5,
+        height: Dimensions.get('window').height / 2.
     },
     colContainer: {
         color: 'black'
@@ -148,12 +149,12 @@ const styles = StyleSheet.create({
         margin: 8
     },
     buttonContainer: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderWidth: 1,
-        borderRadius: 20,
-        flex: 1,
-        flexDirection: 'column',
-        margin: 3
-    }
+        // justifyContent: 'center',
+        // alignItems: 'center',
+        // borderWidth: 1,
+        // borderRadius: 20,
+        // flex: 1,
+        // flexDirection: 'column',
+        // margin: 3
+    },
 })

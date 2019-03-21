@@ -26,8 +26,9 @@ export default class AddStepButton extends Component {
 
 const styles = StyleSheet.create({
     button: {
-        width: 100,
-        height: 100,
+        // width: 'auto',
+        // height: 'auto',
+        flex: 1,
         backgroundColor: 'green',
         justifyContent: 'center',
         borderRadius: 50,

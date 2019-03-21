@@ -26,8 +26,9 @@ export default class RemoveStepButton extends Component {
 
 const styles = StyleSheet.create({
     button: {
-        width: 100,
-        height: 100,
+        // width: 100,
+        // height: 100,
+        flex: 1,
         backgroundColor: 'red',
         justifyContent: 'center',
         borderRadius: 50,
