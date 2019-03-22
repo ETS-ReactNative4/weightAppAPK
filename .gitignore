@@ -57,3 +57,8 @@ buck-out/
 
 # dotenv environment variables file
 .env
+
+# apk and aab
+
+*.aab
+*.apk
