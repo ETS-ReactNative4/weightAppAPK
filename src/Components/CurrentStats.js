@@ -23,7 +23,8 @@ export default class CurrentStats extends Component {
             startDate: 'Loading..',
             nextWeighInDate: 'Loading..',
             daysToWeighIn: 'Loading..',
-            daysToWeighInStyle: styles.dataText
+            daysToWeighInStyle: styles.dataText,
+            lastWeightLog: 'Loading..',
         }
     }
 
@@ -35,7 +36,7 @@ export default class CurrentStats extends Component {
         let daysLeft = this.daysBetween(data[0].goalDate)
         let lbsPerWeek = Number(((lbsLeft / daysLeft) * 7)).toFixed(1);
         let nextWeekGoal = currentWeight - lbsPerWeek;
-        let totalLost = data[0].weight - currentWeight;
+        let totalLost = (data[0].weight - currentWeight).toFixed(1);
         let startDate = data[0].date
         this.setState({
             currentWeight,
@@ -46,7 +47,8 @@ export default class CurrentStats extends Component {
             totalLost,
             startDate,
             nextWeighInDate: nextWeighInDate[0],
-            daysToWeighIn: nextWeighInDate[1]
+            daysToWeighIn: nextWeighInDate[1],
+            lastWeightLog: nextWeighInDate[2]
         })
     }
 
@@ -59,6 +61,7 @@ export default class CurrentStats extends Component {
 
     nextWeighIn(lastEntry) {
         let oneWeekMS = 1000 * 60 * 60 * 24 * 7;
+        let lastWeightLog = new Date(lastEntry.dateTime).toLocaleDateString();
         let weighInDateInMS = oneWeekMS + lastEntry.dateTime;
         let weighInDate = new Date(weighInDateInMS).toLocaleDateString();
         let todayTime = new Date().getTime();
@@ -68,7 +71,7 @@ export default class CurrentStats extends Component {
                 daysToWeighInStyle: styles.pastDue
             })
         }
-        return [weighInDate, daysToWeighIn]
+        return [weighInDate, daysToWeighIn, lastWeightLog]
     }
 
     componentWillMount() {
@@ -86,8 +89,8 @@ export default class CurrentStats extends Component {
             <Grid style={styles.gridContainer}>
                 <Col style={styles.colContainer}>
                     <Row style={styles.rowContainer}>
-                        <Text style={styles.labelText}>Current Weight</Text>
-                        <Text style={styles.dataText}>{this.state.currentWeight} lbs</Text>
+                        <Text style={styles.labelText}>Last Weight Log</Text>
+                        <Text style={styles.dataText}>{this.state.currentWeight} lbs{'\n'}on {this.state.lastWeightLog}</Text>
                     </Row>
                     <Row style={styles.rowContainer}>
                         <Text style={styles.labelText}>Next Week Goal</Text>
@@ -144,7 +147,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 20,
         backgroundColor: 'silver',
-        // flex: 1,
+        flex: 1,
         flexDirection: 'column',
         margin: 3
     },
@@ -156,9 +159,11 @@ const styles = StyleSheet.create({
         fontSize: 12
     },
     dataText: {
-        margin: 8
+        margin: 8,
+        textAlign: 'center'
     },
     pastDue: {
-        color: 'red'
+        color: 'red',
+        textAlign: 'center'
     }
 })
