@@ -21,7 +21,9 @@ export default class CurrentStats extends Component {
             daysLeft: 'Loading..',
             totalLost: 'Loading',
             startDate: 'Loading..',
-            nextWeighInDate: 'Loading..'
+            nextWeighInDate: 'Loading..',
+            daysToWeighIn: 'Loading..',
+            daysToWeighInStyle: styles.dataText
         }
     }
 
@@ -29,7 +31,7 @@ export default class CurrentStats extends Component {
         let mostRecentEntry = data[data.length - 1];
         let nextWeighInDate = this.nextWeighIn(data[data.length - 1]);
         let currentWeight = mostRecentEntry.weight;
-        let lbsLeft = currentWeight - data[0].goalWeight;
+        let lbsLeft =  (currentWeight - data[0].goalWeight).toFixed(1);
         let daysLeft = this.daysBetween(data[0].goalDate)
         let lbsPerWeek = Number(((lbsLeft / daysLeft) * 7)).toFixed(1);
         let nextWeekGoal = currentWeight - lbsPerWeek;
@@ -43,7 +45,8 @@ export default class CurrentStats extends Component {
             daysLeft,
             totalLost,
             startDate,
-            nextWeighInDate,
+            nextWeighInDate: nextWeighInDate[0],
+            daysToWeighIn: nextWeighInDate[1]
         })
     }
 
@@ -58,7 +61,14 @@ export default class CurrentStats extends Component {
         let oneWeekMS = 1000 * 60 * 60 * 24 * 7;
         let weighInDateInMS = oneWeekMS + lastEntry.dateTime;
         let weighInDate = new Date(weighInDateInMS).toLocaleDateString();
-        return weighInDate
+        let todayTime = new Date().getTime();
+        let daysToWeighIn = Math.ceil((weighInDateInMS - todayTime) / (1000 * 60 * 60 * 24));
+        if(daysToWeighIn < 1) {
+            this.setState({
+                daysToWeighInStyle: styles.pastDue
+            })
+        }
+        return [weighInDate, daysToWeighIn]
     }
 
     componentWillMount() {
@@ -98,7 +108,7 @@ export default class CurrentStats extends Component {
                     </Row>
                     <Row style={styles.rowContainer}>
                         <Text style={styles.labelText}>Next Weigh In</Text>
-                        <Text style={styles.dataText}>{this.state.nextWeighInDate}</Text>
+                        <Text style={this.state.daysToWeighInStyle}>{this.state.nextWeighInDate}{'\n'}{this.state.daysToWeighIn} day(s)</Text>
                     </Row>
                 </Col>
                 <Col style={styles.colContainer}>
@@ -134,7 +144,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 20,
         backgroundColor: 'silver',
-        flex: 1,
+        // flex: 1,
         flexDirection: 'column',
         margin: 3
     },
@@ -148,13 +158,7 @@ const styles = StyleSheet.create({
     dataText: {
         margin: 8
     },
-    buttonContainer: {
-        // justifyContent: 'center',
-        // alignItems: 'center',
-        // borderWidth: 1,
-        // borderRadius: 20,
-        // flex: 1,
-        // flexDirection: 'column',
-        // margin: 3
-    },
+    pastDue: {
+        color: 'red'
+    }
 })

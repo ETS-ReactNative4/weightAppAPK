@@ -9,9 +9,9 @@ import {
 var userData = [
     {
         date: '3/1',
-        dateTime: 8378274823,
+        dateTime: 1552531710075,
         weight: 130,
-        goalDate: 123812832837,
+        goalDate: 1554531710075,
         goalWeight: 100
     },
     {
