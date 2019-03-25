@@ -129,7 +129,7 @@ export default class AddStep extends Component {
           keyboardType='number-pad'
           onChangeText={this.onChangeWeight}
           value={this.state.weightText}
-          maxLength={3}
+          maxLength={5}
           placeholder='Weight'
           autoFocus={true}
           textAlign={'center'}

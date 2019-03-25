@@ -167,14 +167,14 @@ export default class NewUser extends Component {
                     <TouchableHighlight
                         style={styles.datePicker}
                         onPress={this.showGoalDatePicker}>
-                        <Text style={styles.dateButton}>Change Goal Date</Text>
+                        <Text style={styles.dateButton}>Choose Goal Date</Text>
                     </TouchableHighlight>
                 </View>
                 <TextInput style={styles.weightTextInput}
                     keyboardType='number-pad'
                     onChangeText={this.onChangeWeight}
                     value={this.state.weightText}
-                    maxLength={3}
+                    maxLength={5}
                     placeholder='Current Weight'
                     autoFocus={false}
                     textAlign={'center'}
@@ -184,7 +184,7 @@ export default class NewUser extends Component {
                     keyboardType='number-pad'
                     onChangeText={this.onChangeGoalWeight}
                     value={this.state.goalWeightText}
-                    maxLength={3}
+                    maxLength={5}
                     placeholder='Goal Weight'
                     autoFocus={false}
                     textAlign={'center'}
