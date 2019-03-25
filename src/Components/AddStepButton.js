@@ -17,7 +17,7 @@ export default class AddStepButton extends Component {
                 onPress={this.showAddStepModal}
                 background={TouchableNativeFeedback.SelectableBackground()}>
                 <View style={styles.button}>
-                    <Text style={styles.text}>+</Text>
+                    <Text style={styles.text}>Add{'\n'}Weight Log</Text>
                 </View>
             </TouchableNativeFeedback>
         )
@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
     },
     text: {
         textAlign: 'center',
-        fontSize: 50,
+        fontSize: 20,
         fontWeight: 'bold',
         color: 'black',
         opacity: .75
