@@ -26,8 +26,6 @@ export default class AddStepButton extends Component {
 
 const styles = StyleSheet.create({
     button: {
-        // width: 'auto',
-        // height: 'auto',
         flex: 1,
         backgroundColor: 'green',
         justifyContent: 'center',
@@ -36,7 +34,7 @@ const styles = StyleSheet.create({
     },
     text: {
         textAlign: 'center',
-        fontSize: 20,
+        fontSize: 16,
         fontWeight: 'bold',
         color: 'black',
         opacity: .75

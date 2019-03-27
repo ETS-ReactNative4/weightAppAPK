@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
     },
     text: {
         textAlign: 'center',
-        fontSize: 20,
+        fontSize: 16,
         fontWeight: 'bold',
         color: 'black',
         opacity: .75

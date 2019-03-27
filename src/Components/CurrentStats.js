@@ -135,7 +135,6 @@ export default class CurrentStats extends Component {
 
 const styles = StyleSheet.create({
     gridContainer: {
-        // margin: 5,
         height: Dimensions.get('window').height / 2.
     },
     colContainer: {
