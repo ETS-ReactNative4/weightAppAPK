@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, Text, Dimensions } from 'react-native';
+import { StyleSheet, Text, Dimensions } from 'react-native';
 import { Col, Row, Grid } from 'react-native-easy-grid';
 import AddStepButton from './AddStepButton';
 import RemoveStepButton from './RemoveStepButton';
@@ -32,7 +32,7 @@ export default class CurrentStats extends Component {
         let mostRecentEntry = data[data.length - 1];
         let nextWeighInDate = this.nextWeighIn(data[data.length - 1]);
         let currentWeight = mostRecentEntry.weight;
-        let lbsLeft =  (currentWeight - data[0].goalWeight).toFixed(1);
+        let lbsLeft = (currentWeight - data[0].goalWeight).toFixed(1);
         let daysLeft = this.daysBetween(data[0].goalDate)
         let lbsPerWeek = Number(((lbsLeft / daysLeft) * 7)).toFixed(1);
         let nextWeekGoal = currentWeight - lbsPerWeek;
@@ -66,7 +66,7 @@ export default class CurrentStats extends Component {
         let weighInDate = new Date(weighInDateInMS).toLocaleDateString();
         let todayTime = new Date().getTime();
         let daysToWeighIn = Math.ceil((weighInDateInMS - todayTime) / (1000 * 60 * 60 * 24));
-        if(daysToWeighIn < 1) {
+        if (daysToWeighIn < 1) {
             this.setState({
                 daysToWeighInStyle: styles.pastDue
             })

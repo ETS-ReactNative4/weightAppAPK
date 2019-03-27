@@ -1,19 +1,15 @@
 import React, { Component } from 'react';
 import {
     Text,
-    TextInput,
     TouchableHighlight,
     View,
-    DatePickerAndroid,
     StyleSheet,
     AsyncStorage,
     ScrollView,
-    Button,
     Alert
 } from 'react-native';
 import { StackActions, NavigationActions } from 'react-navigation';
 import { Col, Row, Grid } from 'react-native-easy-grid';
-import { Checkbox } from 'react-native-elements';
 
 export default class RemoveStep extends Component {
     static navigationOptions = {
@@ -30,6 +26,8 @@ export default class RemoveStep extends Component {
         this.mapData = this.mapData.bind(this);
         this.confirmDelete = this.confirmDelete.bind(this);
         this.removeStep = this.removeStep.bind(this);
+        this.deleteAllData = this.deleteAllData.bind(this);
+        this.confirmDeleteAll = this.confirmDeleteAll.bind(this);
         this.state = {
             modalVisible: true,
             tableOfData: <Text>Loading..</Text>,
@@ -102,7 +100,7 @@ export default class RemoveStep extends Component {
 
     confirmDelete(position, data) {
         if (position === 0) {
-            alert('You cant remove your first log')
+            alert('You cant remove your first log.\nChoose "Delete All" to start a new goal.')
         } else {
             Alert.alert(
                 'Confirm',
@@ -123,14 +121,43 @@ export default class RemoveStep extends Component {
         }
     }
 
+    confirmDeleteAll() {
+        Alert.alert(
+            'Confirm Delete All Data',
+            `This will delete all of your logs and goals. You will be sent back to the create goal screen.\nAre you sure?`,
+            [
+                {
+                    text: 'No',
+                    onPress: () => { },
+                    style: 'cancel'
+                },
+                {
+                    text: 'Confirm',
+                    onPress: () => { this.deleteAllData() }
+                }
+            ],
+            { cancelable: false }
+        );
+    }
+
     removeStep(position) {
-        new Promise((resolve, reject) =>{
+        new Promise((resolve, reject) => {
             this.getData(resolve);
-        }).then((result) =>{
+        }).then((result) => {
             result.splice(position, 1)
             this.saveData(result);
             this.resetStack()
         })
+    }
+
+    deleteAllData = async () => {
+        try {
+            await AsyncStorage.removeItem('data');
+            this.resetStack();
+        } catch (error) {
+            console.log(error);
+            alert(error.message);
+        }
     }
 
     render() {
@@ -139,6 +166,13 @@ export default class RemoveStep extends Component {
                 <Grid>
                     {this.state.tableOfData}
                 </Grid>
+                <View style={styles.delAllBtnContainer}>
+                    <TouchableHighlight
+                        style={styles.delAllButton}
+                        onPress={this.confirmDeleteAll}>
+                        <Text style={styles.delAllButtonText}>Delete All</Text>
+                    </TouchableHighlight>
+                </View>
             </ScrollView>
         );
     }
@@ -152,6 +186,27 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderRadius: 25,
         justifyContent: 'center',
+    },
+    delAllButton: {
+        backgroundColor: 'red',
+        width: 150,
+        height: 80,
+        alignItems: 'center',
+        borderRadius: 25,
+        justifyContent: 'center',
+        flex: 1,
+        flexDirection: 'column',
+    },
+    delAllButtonText: {
+        fontWeight: 'bold',
+        fontSize: 22,
+        color: 'black'
+    },
+    delAllBtnContainer: {
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center'
     },
     delButtonText: {
         fontSize: 22,

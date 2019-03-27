@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import { Text, View, Dimensions, Button } from 'react-native';
+import { Text, View, Dimensions } from 'react-native';
 import { AsyncStorage, ToastAndroid } from 'react-native';
 import {
     LineChart,
-    onDataPointClick,
 } from 'react-native-chart-kit';
 
 var userData = [
@@ -114,7 +113,6 @@ export default class DataGraph extends Component {
                         ToastAndroid.show(`${value}lbs`, ToastAndroid.SHORT)
                     }}
                     style={{
-                        // marginBottom: -50,
                         borderRadius: 16,
                         alignItems: 'center',
                     }}
