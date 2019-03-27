@@ -99,11 +99,12 @@ export default class DataGraph extends Component {
                     }}
                     width={Dimensions.get('window').width - 10}
                     height={Dimensions.get('window').height / 2}
+                    yAxisLabel={'Weight'}
                     chartConfig={{
                         backgroundColor: '#a5a5a5',
                         backgroundGradientFrom: '#bcbcbc',
                         backgroundGradientTo: '#5b5b5b',
-                        decimalPlaces: 2,
+                        decimalPlaces: 0,
                         color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
                         style: {
                             borderRadius: 16
@@ -114,7 +115,6 @@ export default class DataGraph extends Component {
                     }}
                     style={{
                         borderRadius: 16,
-                        alignItems: 'center',
                     }}
                 />
             })
